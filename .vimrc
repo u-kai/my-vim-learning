@@ -32,11 +32,23 @@ function! QuickfixFilenames()
         return join(map(values(buffer_numbers),'fnameescape(v:val)'))
         endfunction
 
+let g:syntastic_javascript_checkers=['eslint']
+let g:syntastic_python_checkers=['pep8', 'pyflakes']
 call plug#begin('~/.vim/plugged')
   Plug 'rust-lang/rust.vim'
   Plug 'EdenEast/nightfox.nvim'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+  Plug 'godlygeek/tabular'
+  Plug 'plasticboy/vim-markdown'
+  Plug 'previm/previm'
+
 call plug#end()
+let g:vim_markdown_folding_disabled = 1
+let g:previm_enable_realtime = 1
+let g:previm_open_cmd = 'open -a Google\ Chrome'
 
 filetype plugin indent on
 let g:rustfmt_autosave = 1
@@ -59,3 +71,6 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 set termguicolors
+packloadall
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
