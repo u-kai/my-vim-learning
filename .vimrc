@@ -44,7 +44,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'godlygeek/tabular'
   Plug 'plasticboy/vim-markdown'
   Plug 'previm/previm'
-
+  Plug 'lambdalisue/fern.vim'
+  Plug 'lambdalisue/fern-git-status.vim'
 call plug#end()
 let g:vim_markdown_folding_disabled = 1
 let g:previm_enable_realtime = 1
@@ -74,3 +75,5 @@ set termguicolors
 packloadall
 let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
+
+nnoremap <C-n> :Fern . -reveal=% -drawer -toggle -width=40<CR>

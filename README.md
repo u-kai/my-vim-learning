@@ -12,6 +12,9 @@
 -   CocInstall coc-tsserver
 -   CocInstall coc-rust-analyzer
     -   PrevimOpen
+-   PlugIn のための初期インストール
+-   $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 ## 参考図書
 
