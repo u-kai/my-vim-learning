@@ -7,6 +7,11 @@
 - 変更作業を繰り返し行う場合はビジュアルモードのコマンドを使うよりもそれと等価なオペレータコマンドを優先すべき
 
  
+
+
+## vimrc コマンド
+- CocInstall coc-tsserver
+- CocInstall coc-rust-analyzer
 ## 参考図書
  実践Vim 
 
