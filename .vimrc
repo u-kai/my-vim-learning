@@ -42,10 +42,11 @@ call plug#begin('~/.vim/plugged')
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
   Plug 'godlygeek/tabular'
-  Plug 'plasticboy/vim-markdown'
+  "Plug 'plasticboy/vim-markdown'
   Plug 'previm/previm'
   Plug 'lambdalisue/fern.vim'
   Plug 'lambdalisue/fern-git-status.vim'
+  Plug 'tomasiser/vim-code-dark'
 call plug#end()
 let g:vim_markdown_folding_disabled = 1
 let g:previm_enable_realtime = 1
@@ -76,4 +77,7 @@ packloadall
 let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
 
+colorscheme codedark
+let g:airline_thema = 'codedark'
 nnoremap <C-n> :Fern . -reveal=% -drawer -toggle -width=40<CR>
+
