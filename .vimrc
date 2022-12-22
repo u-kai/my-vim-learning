@@ -39,6 +39,7 @@ call plug#end()
 
 filetype plugin indent on
 let g:rustfmt_autosave = 1
+let g:coc_global_extensions = ['coc-rust-analyzer']
 if has("patch-8.1.1564")
   " Recently vim can merge signcolumn and number column into one
   set signcolumn=number
