@@ -42,7 +42,7 @@ call plug#begin('~/.vim/plugged')
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
   Plug 'godlygeek/tabular'
-  Plug 'plasticboy/vim-markdown'
+  "Plug 'plasticboy/vim-markdown'
   Plug 'previm/previm'
   Plug 'lambdalisue/fern.vim'
   Plug 'lambdalisue/fern-git-status.vim'
