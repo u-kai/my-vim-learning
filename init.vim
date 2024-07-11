@@ -45,20 +45,37 @@ function! ConvertVisualSelectedByFunc(f)
     let l:line = l:lines[i]
     "select only one column
     if l:start[2] == l:end[2]
-        let l:replacement = call(a:f, [strpart(l:line,l:start[2] - 1)])
-        call setline(l:start[1]+i, l:replacement)
+        let start_char = char2nr(l:line[l:start[2] - 1])
+        " check selected char byte
+        let l:char_byte = 1
+        if start_char >= 192 && start_char <= 223
+            let l:char_byte = 2 
+        elseif start_char >= 224 && start_char <= 239
+            let l:char_byte = 3
+        elseif start_char >= 240 && start_char <= 247
+            let l:char_byte = 4
+        end
+
+        let l:before = strpart(l:line, 0, l:start[2] - 1)
+        let l:replacement = call(a:f, [strpart(l:line, l:start[2] - 1, char_byte)])
+        let l:after = strpart(l:line, l:start[2] - 1 + char_byte)
+
+        let l:line = l:before . l:replacement . l:after
+        call setline(l:start[1] + i, l:line)
         continue
     endif
 
     let l:before = strpart(l:line, 0, l:start[2] - 1)
+    let l:replacement = call(a:f, [strpart(l:line, l:start[2] - 1, l:end[2] - 1)])
     let l:after = strpart(l:line, l:end[2] - 1)
-    let l:selected = strpart(l:line, l:start[2] - 1, l:end[2] - 1)
-    let l:replacement_processed = call(a:f, [l:selected])
-    let l:line = l:before . l:replacement_processed . l:after
-    call setline(l:start[1]+i, l:line)
+
+    let l:line = l:before . l:replacement . l:after
+    call setline(l:start[1] + i, l:line)
 
   endfor
 endfunction
+
+command! -nargs=1 Ten echo system("termai ten " . <f-args>)
 
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
 
