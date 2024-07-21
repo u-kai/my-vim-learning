@@ -6,6 +6,8 @@ set smartcase
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 set clipboard=unnamed
 set noswapfile
+nnoremap <silent> <C-l> :bnext<CR>
+nnoremap <silent> <C-h> :bprev<CR>
 
 if !exists('g:vscode')
     set expandtab
@@ -75,8 +77,13 @@ function! ConvertVisualSelectedByFunc(f)
   endfor
 endfunction
 
-command! -nargs=1 Ten echo system("termai ten " . <f-args>)
+function Translate(text)
+    let cmd =  "termai ten " . '"' . a:text . '"'
+    echo l:cmd
+    return system(l:cmd)
+endfunction
 
+vnoremap <C-t> :<C-u>call ConvertVisualSelectedByFunc("Translate")<CR>
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
 
 syntax on
