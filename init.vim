@@ -37,6 +37,18 @@ function! HiraToKata(str) abort
   return a:str->substitute('[ぁ-ゖ]','\=nr2char(char2nr(submatch(0), v:true) + 96, v:true)', 'g')
 endfunction
 
+function! CharToByte(char) abort
+    let l:char_byte = 1
+    if a:char >= 192 && a:char <= 223
+        let l:char_byte = 2 
+    elseif a:char >= 224 && a:char <= 239
+        let l:char_byte = 3
+    elseif a:char >= 240 && a:char <= 247
+        let l:char_byte = 4
+    end
+    return l:char_byte
+endfunction
+
 function! ConvertVisualSelectedByFunc(f)
   let l:start = getpos("'<")
   let l:end = getpos("'>")
@@ -48,16 +60,7 @@ function! ConvertVisualSelectedByFunc(f)
     "select only one column
     if l:start[2] == l:end[2]
         let start_char = char2nr(l:line[l:start[2] - 1])
-        " check selected char byte
-        let l:char_byte = 1
-        if start_char >= 192 && start_char <= 223
-            let l:char_byte = 2 
-        elseif start_char >= 224 && start_char <= 239
-            let l:char_byte = 3
-        elseif start_char >= 240 && start_char <= 247
-            let l:char_byte = 4
-        end
-
+        let char_byte = CharToByte(start_char)
         let l:before = strpart(l:line, 0, l:start[2] - 1)
         let l:replacement = call(a:f, [strpart(l:line, l:start[2] - 1, char_byte)])
         let l:after = strpart(l:line, l:start[2] - 1 + char_byte)
@@ -68,8 +71,13 @@ function! ConvertVisualSelectedByFunc(f)
     endif
 
     let l:before = strpart(l:line, 0, l:start[2] - 1)
-    let l:replacement = call(a:f, [strpart(l:line, l:start[2] - 1, l:end[2] - 1)])
-    let l:after = strpart(l:line, l:end[2] - 1)
+    let l:selected_last_char_byte = CharToByte(char2nr(l:line[l:end[2] - 1]))
+    let l:selected_last_char_start = l:end[2] - l:selected_last_char_byte
+    let l:range = l:end[2] - l:start[2] + l:selected_last_char_byte
+    let l:selected_last_char = strpart(l:line,l:selected_last_char_start,range)
+
+    let l:replacement = call(a:f, [strpart(l:line, l:start[2] - 1, l:range )])
+    let l:after = strpart(l:line, l:end[2] + l:selected_last_char_byte - 1)
 
     let l:line = l:before . l:replacement . l:after
     call setline(l:start[1] + i, l:line)
