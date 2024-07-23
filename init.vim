@@ -103,7 +103,7 @@ call plug#begin('~/.config/nvim/plugged')
 
   """"""""""""""""""""" LSP
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  ""Plug 'rust-lang/rust.vim'
+  Plug 'dense-analysis/ale'
 
   """"""""""""""""""""" Lint and Formatters
   ""Plug 'prettier/vim-prettier', {
@@ -145,6 +145,8 @@ if executable('terraform-lsp')
 endif
 let g:terraform_fmt_on_save=1
 
+let g:ale_disable_lsp = 1
+let g:ale_lint_on_text_changed = 1
 """"""""""""""""""""" LSP Settings
 let g:coc_global_extensions = [
       \'coc-actions',
