@@ -169,6 +169,7 @@ let g:coc_global_extensions = [
       \'coc-jedi', 
       \'coc-json', 
       \'coc-yaml',
+      \'coc-solargraph',
       \'coc-rust-analyzer',]
 """ GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
