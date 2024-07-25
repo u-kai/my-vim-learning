@@ -3,11 +3,12 @@ inoremap <silent> jj <ESC>
 set hlsearch
 set incsearch
 set smartcase
-nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+nnoremap <silent> <C-f> :<C-u>nohlsearch<CR><C-f>
 set clipboard=unnamed
 set noswapfile
 nnoremap <silent> <C-l> :bnext<CR>
 nnoremap <silent> <C-h> :bprev<CR>
+nnoremap <silent> <C-k> :bnext<CR>:bdelete #<CR>
 
 if !exists('g:vscode')
     set expandtab
@@ -168,7 +169,6 @@ let g:coc_global_extensions = [
       \'coc-java', 
       \'coc-go', 
       \'coc-tsserver', 
-      \'coc-jedi', 
       \'coc-json', 
       \'coc-yaml',
       \'coc-solargraph',
@@ -267,3 +267,4 @@ command! -bang -nargs=* Rg
 nnoremap <C-g> :Rg<CR>
 
 let g:copilot_filetypes={"markdown":v:true,"yaml":v:true}
+

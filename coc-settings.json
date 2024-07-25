@@ -8,12 +8,6 @@
       "filetypes": ["ruby"]
     }
   },
-  "jedi": {
-    "enable": true,
-    "startupMessage": true,
-    "startupMessage": "Jedi ready!",
-    "executable.command": "/usr/local/Cellar/python@3.9/3.9.17_1/Frameworks/Python.framework/Versions/3.9/bin/jedi-language-server"
-  },
   "diagnostic-languageserver.filetypes": {
     "python": ["flake8"]
   },
