@@ -9,6 +9,7 @@ set noswapfile
 nnoremap <silent> <C-l> :bnext<CR>
 nnoremap <silent> <C-h> :bprev<CR>
 nnoremap <silent> <C-k> :bnext<CR>:bdelete #<CR>
+command! ReloadInitNvim source ~/.config/nvim/init.vim
 
 if !exists('g:vscode')
     set expandtab
@@ -24,6 +25,7 @@ if !exists('g:vscode')
     inoremap [ []<LEFT>
     inoremap ( ()<LEFT>
     inoremap " ""<LEFT>
+    inoremap < <><LEFT>
     " inoremap ' ''<LEFT>
     " set complement insert enter
     " inoremap <expr> <CR> pumvisible() ? "<C-y>" : "<CR>"
