@@ -283,3 +283,4 @@ let g:ale_fixers = {
             \'ruby': ['rubocop'],
             \}
 let g:ale_ruby_rubocop_executable = 'robocop'
+let g:fern#default_hidden=1
