@@ -137,6 +137,8 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'junegunn/fzf.vim'
   Plug 'hashivim/vim-terraform' , { 'for': 'terraform'}
 
+  Plug 'ngmy/vim-rubocop'
+
 
 
 call plug#end()
@@ -274,3 +276,10 @@ nnoremap <C-g> :Rg<CR>
 
 let g:copilot_filetypes={"markdown":v:true,"yaml":v:true}
 
+let g:ale_linters = {
+            \    'ruby': ['rubocop'],
+            \}
+let g:ale_fixers = {
+            \'ruby': ['rubocop'],
+            \}
+let g:ale_ruby_rubocop_executable = 'robocop'
