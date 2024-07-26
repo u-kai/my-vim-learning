@@ -130,6 +130,7 @@ call plug#begin('~/.config/nvim/plugged')
 
   """"""""""""""""""""" Display Git
   Plug 'airblade/vim-gitgutter'
+  Plug 'APZelos/blamer.nvim'
 
   """"""""""""""""""""" Search files
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -137,7 +138,10 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'hashivim/vim-terraform' , { 'for': 'terraform'}
 
 
+
 call plug#end()
+
+let g:blamer_enabled = 1
 
 if executable('terraform-lsp')
   au User lsp_setup call lsp#register_server({
