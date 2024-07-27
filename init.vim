@@ -10,6 +10,9 @@ nnoremap <silent> <C-l> :bnext<CR>
 nnoremap <silent> <C-h> :bprev<CR>
 nnoremap <silent> <C-k> :bnext<CR>:bdelete #<CR>
 command! ReloadInitNvim source ~/.config/nvim/init.vim
+nnoremap <silent> ; :vertical resize +5<CR>
+nnoremap <silent> - :vertical resize -5<CR>
+
 
 if !exists('g:vscode')
     set expandtab
