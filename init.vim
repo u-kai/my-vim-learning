@@ -10,9 +10,48 @@ nnoremap <silent> <C-l> :bnext<CR>
 nnoremap <silent> <C-h> :bprev<CR>
 nnoremap <silent> <C-k> :bnext<CR>:bdelete #<CR>
 command! ReloadInitNvim source ~/.config/nvim/init.vim
-nnoremap <silent> ; :vertical resize +5<CR>
-nnoremap <silent> - :vertical resize -5<CR>
+nnoremap <silent> <C-]> :vertical resize +5<CR>
+nnoremap <silent> <C-[> :vertical resize -5<CR>
 
+function! AddLastLine(text)abort
+    let lnum = line('$')
+    let last_line = getline(l:lnum)
+    let new_line = l:last_line . a:text
+
+    call setline(l:lnum, l:new_line)
+endfunction
+
+function! Chat() abort
+    :new
+
+    call AddLastLine("you >")
+endfunction
+
+function! AICommand()
+    " 現在のバッファの内容を取得
+    let l:lines = getline(1, '$')
+    let l:text = join(l:lines, "\n")
+    " 各行を大文字に変換
+    let cmd =  "termai ask " . '"' . l:text . '"'
+    return l:cmd
+endfunction
+
+function! ProcessOutput(job_id,data,event) abort
+    if a:event != 'stdout'
+        return
+    endif
+    call AddLastLine(join(a:data,''))
+endfunction
+
+function! Run() 
+    call append(line('$'), "\n")
+    let l:cmd = AICommand()
+    call jobstart(l:cmd, {'on_stdout': 'ProcessOutput'}) 
+endfunction
+
+command! Chat call Chat()
+command! Send call ProcessInput()
+command! Run call Run()
 
 if !exists('g:vscode')
     set expandtab
@@ -157,8 +196,8 @@ if executable('terraform-lsp')
 endif
 let g:terraform_fmt_on_save=1
 
-let g:ale_disable_lsp = 1
-let g:ale_lint_on_text_changed = 1
+"let g:ale_disable_lsp = 1
+"let g:ale_lint_on_text_changed = 1
 """"""""""""""""""""" LSP Settings
 let g:coc_global_extensions = [
       \'coc-actions',
@@ -279,11 +318,11 @@ nnoremap <C-g> :Rg<CR>
 
 let g:copilot_filetypes={"markdown":v:true,"yaml":v:true}
 
-let g:ale_linters = {
-            \    'ruby': ['rubocop'],
-            \}
-let g:ale_fixers = {
-            \'ruby': ['rubocop'],
-            \}
+""let g:ale_linters = {
+""            \    'ruby': ['rubocop'],
+""            \}
+""let g:ale_fixers = {
+""            \'ruby': ['rubocop'],
+""            \}
 let g:ale_ruby_rubocop_executable = 'robocop'
 let g:fern#default_hidden=1
