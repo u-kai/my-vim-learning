@@ -94,6 +94,35 @@ function! CharToByte(char) abort
     return l:char_byte
 endfunction
 
+function! GetVisualSelected() abort
+  let l:start = getpos("'<")
+  let l:end = getpos("'>")
+
+  let l:lines = getline(l:start[1], l:end[1])
+
+  let l:result = ""
+  for i in range(0, len(l:lines) - 1)
+    let l:line = l:lines[i]
+    "select only one column
+    if l:start[2] == l:end[2]
+        let start_char = char2nr(l:line[l:start[2] - 1])
+        let char_byte = CharToByte(start_char)
+        let l:result = l:result . strpart(l:line, l:start[2] - 1, char_byte)
+        continue
+    endif
+
+    let l:selected_last_char_byte = CharToByte(char2nr(l:line[l:end[2] - 1]))
+    let l:selected_last_char_start = l:end[2] - l:selected_last_char_byte
+    let l:range = l:end[2] - l:start[2] + l:selected_last_char_byte
+    let l:selected_last_char = strpart(l:line,l:selected_last_char_start,range)
+
+    let l:result = l:result . strpart(l:line, l:start[2] - 1, l:range)
+
+  endfor
+  return l:result
+
+endfunction
+
 function! ConvertVisualSelectedByFunc(f)
   let l:start = getpos("'<")
   let l:end = getpos("'>")
@@ -136,8 +165,15 @@ function Translate(text)
     return system(l:cmd)
 endfunction
 
+
+function! SearchSelected()abort 
+    let l:selected = GetVisualSelected()
+    execute "Rg " . l:selected
+endfunction
+
 vnoremap <C-t> :<C-u>call ConvertVisualSelectedByFunc("Translate")<CR>
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
+vnoremap <C-g> :<C-u>call SearchSelected()<CR>
 
 syntax on
 """""""""""""""""""""" Vim file type detection
