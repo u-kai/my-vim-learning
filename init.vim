@@ -53,6 +53,8 @@ command! Chat call Chat()
 command! Send call ProcessInput()
 command! Run call Run()
 
+
+
 if !exists('g:vscode')
     set expandtab
     set smartcase
@@ -170,6 +172,15 @@ function! SearchSelected()abort
     let l:selected = GetVisualSelected()
     execute "Rg " . l:selected
 endfunction
+
+function TypeGenRust(name) abort
+    let l:selected = GetVisualSelected()
+    let l:cmd = "tg rust -p --row " .  "'" .l:selected."'". " --name " . a:name . " --derives " . "Clone,Debug" . " --dist " . a:name . ".rs"
+    echo l:cmd
+    return system(l:cmd)
+endfunction
+
+command! -range -nargs=1 TGRust call TypeGenRust(<f-args>)
 
 vnoremap <C-t> :<C-u>call ConvertVisualSelectedByFunc("Translate")<CR>
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
