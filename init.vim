@@ -174,13 +174,22 @@ function! SearchSelected()abort
 endfunction
 
 function TypeGenRust(name) abort
-    let l:selected = GetVisualSelected()
-    let l:cmd = "tg rust -p --row " .  "'" .l:selected."'". " --name " . a:name . " --derives " . "Clone,Debug" . " --dist " . a:name . ".rs"
+    let l:json = GetVisualSelected()
+    let l:cmd = "tg rust -p --row " .  "'" .l:json . "'" . " --name " . a:name . " --derives " . "Clone,Debug" . "  --console"
     echo l:cmd
-    return system(l:cmd)
+    let output = system(l:cmd)
+    let @0 = l:output
 endfunction
 
-command! -range -nargs=1 TGRust call TypeGenRust(<f-args>)
+function TypeGenGo(name) abort
+    let l:json = GetVisualSelected()
+    let l:cmd = "tg go -pj --row " .  "'" .l:json . "'" . " --name " . a:name . "  --console"
+    echo l:cmd
+    let output = system(l:cmd)
+    let @0 = l:output
+endfunction
+command! -range -nargs=1 Tgrs call TypeGenRust(<f-args>)
+command! -range -nargs=1 Tggo call TypeGenGo(<f-args>)
 
 vnoremap <C-t> :<C-u>call ConvertVisualSelectedByFunc("Translate")<CR>
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
