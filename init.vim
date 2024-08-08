@@ -162,8 +162,31 @@ function! ConvertVisualSelectedByFunc(f)
 endfunction
 
 function Translate(text)
-    let cmd =  "termai ten " . '"' . a:text . '"'
-    echo l:cmd
+    if a:text == ""
+        return ""
+    endif
+
+    let cmd =  "cai ask -r 単語を英語にしてください。ただし、解説等は一切不要で結果のみください。 " . '"' . a:text . '"'
+    return system(l:cmd)
+endfunction
+
+function CreateVariableName(text)
+    if a:text == ""
+        return ""
+    endif
+
+    let l:file_extension = expand('%:e')
+    let l:name_rule = ""
+    if l:file_extension == "rs" 
+        let l:name_rule = "snake_case"
+    elseif l:file_extension == "go"
+        let l:name_rule = "camelCase"
+    else 
+        let l:name_rule = "snake_case"
+    endif
+
+
+    let cmd =  "cai ask -r 今から渡す指示に沿ったプログラミングの変数名を考えてく提示してください。ただし、解説等は一切不要で結果のみください。変数の命名規則は" . l:name_rule . "に則って考えてください" . ' "' . a:text . '"'
     return system(l:cmd)
 endfunction
 
@@ -193,6 +216,7 @@ command! -range -nargs=1 Tggo call TypeGenGo(<f-args>)
 
 vnoremap <C-t> :<C-u>call ConvertVisualSelectedByFunc("Translate")<CR>
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
+vnoremap <C-v> :<C-u>call ConvertVisualSelectedByFunc("CreateVariableName")<CR>
 vnoremap <C-g> :<C-u>call SearchSelected()<CR>
 
 syntax on
