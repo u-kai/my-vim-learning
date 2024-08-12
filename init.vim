@@ -190,7 +190,6 @@ function CreateVariableName(text)
     return system(l:cmd)
 endfunction
 
-
 function! SearchSelected()abort 
     let l:selected = GetVisualSelected()
     execute "Rg " . l:selected
@@ -267,13 +266,13 @@ call plug#end()
 
 let g:blamer_enabled = 1
 
-if executable('terraform-lsp')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'terraform-lsp',
-    \ 'cmd': {server_info->['terraform-lsp']},
-    \ 'whitelist': ['terraform','tf'],
-    \ })
-endif
+""if executable('terraform-lsp')
+""  au User lsp_setup call lsp#register_server({
+""    \ 'name': 'terraform-lsp',
+""    \ 'cmd': {server_info->['terraform-lsp']},
+""    \ 'whitelist': ['terraform','tf'],
+""    \ })
+""endif
 let g:terraform_fmt_on_save=1
 
 "let g:ale_disable_lsp = 1
