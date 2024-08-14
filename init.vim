@@ -170,6 +170,26 @@ function Translate(text)
     return system(l:cmd)
 endfunction
 
+function CreateProgram(text)
+    if a:text == ""
+        return ""
+    endif
+
+    let extention = expand('%:e')
+
+    let cmd =  "cai ask -r 今から渡す文章に沿ったプログラムを考えてください。ただし、解説やプログラミングの囲み表記などは一切不要で結果のみください。言語は" . l:extention . "拡張子の言語です。 " . "'" . a:text . "'"
+    return system(l:cmd)
+endfunction
+
+function TypoCorrection(text)
+    if a:text == ""
+        return ""
+    endif
+    let l:text = substitute(a:text, '-', '\\-', 'g')
+    let cmd =  "cai ask -r 今から渡す文章の誤字脱字を修正してください。ただし、解説等は一切不要で結果のみください。また、もし\\-という文字があればそれは-に変換してください " . "'" . l:text . "'"
+    return system(l:cmd)
+endfunction
+
 function CreateVariableName(text)
     if a:text == ""
         return ""
@@ -212,11 +232,15 @@ function TypeGenGo(name) abort
 endfunction
 command! -range -nargs=1 Tgrs call TypeGenRust(<f-args>)
 command! -range -nargs=1 Tggo call TypeGenGo(<f-args>)
+command! -range Typo call ConvertVisualSelectedByFunc("TypoCorrection")
 
 vnoremap <C-t> :<C-u>call ConvertVisualSelectedByFunc("Translate")<CR>
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
 vnoremap <C-v> :<C-u>call ConvertVisualSelectedByFunc("CreateVariableName")<CR>
 vnoremap <C-g> :<C-u>call SearchSelected()<CR>
+vnoremap <C-p> :<C-u>call ConvertVisualSelectedByFunc("CreateProgram")<CR>
+
+""""""""""""""""""""" Plugin settings
 
 syntax on
 """""""""""""""""""""" Vim file type detection
