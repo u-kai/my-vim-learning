@@ -159,6 +159,7 @@ function! ConvertVisualSelectedByFunc(f)
   endfor
 endfunction
 
+
 function Translate(text)
     if a:text == ""
         return ""
@@ -246,19 +247,80 @@ vnoremap <C-v> :<C-u>call ConvertVisualSelectedByFunc("CreateVariableName")<CR>
 vnoremap <C-g> :<C-u>call SearchSelected()<CR>
 vnoremap <C-p> :<C-u>call ConvertVisualSelectedByFunc("CreateProgram")<CR>
 
-
-function! AddTopLine(text)abort
+function! ToComment(text)abort
     let l:text = a:text
-    while 1
-        let l:car = nr2char(getchar())
-        if l:car == "\<Esc>"
-            break
-        endif
-        let l:text = l:car . l:text
-    endwhile
+    let l:extention = expand('%:e')
+    let hash_comment_extentions = ["py", "rb", "tf", "sh", "yaml"]
+    let slash_comment_extentions = ["go", "rs", "java", "c", "cpp", "js", "ts", "html", "css", "scss", "less", "json", "graphql", "md", "vue", "svelte", "yaml", "html"]
+    if index(hash_comment_extentions, l:extention) != -1
+        let l:text = "# " . l:text
+    elseif index(slash_comment_extentions, l:extention) != -1
+        let l:text = "// " . l:text
+    endif
+
     return l:text
 endfunction
-vnoremap I :<C-u>call ConvertVisualSelectedByFunc("AddTopLine")<CR>
+
+function! GetCharUntilEscape(prev_display) abort
+  let l:result = ""
+  echon a:prev_display
+  while 1
+    let l:real_char = getchar()
+    let l:char = nr2char(l:real_char)
+    if l:real_char == "\<BS>"
+        if len(l:result) > 0
+            let l:result = l:result[:-2]
+            echohl None | redraw
+            echon a:prev_display . l:result
+        endif
+    endif
+    if l:char == "\e"
+        break
+    endif
+    if l:char == "j"
+        let l:next = nr2char(getchar())
+        if l:next == "j"
+            break
+        endif
+        let l:result = "j" . l:next  . l:result
+        echon "j"
+        echon l:next
+        continue
+    endif
+    let l:result = l:result . l:char
+    echon l:char
+  endwhile
+  return l:result
+endfunction
+
+function! AddLineHead()
+  let l:start = getpos("'<")
+  let l:end = getpos("'>")
+
+  let l:lines = getline(l:start[1], l:end[1])
+
+  let l:add_text = GetCharUntilEscape("added to head:")
+  for i in range(0, len(l:lines) - 1)
+    let l:line = l:lines[i]
+        call setline(l:start[1] + i, l:add_text . l:line)
+  endfor
+endfunction
+
+function! AddLineTail()
+  let l:start = getpos("'<")
+  let l:end = getpos("'>")
+
+  let l:lines = getline(l:start[1], l:end[1])
+
+  let l:add_text = GetCharUntilEscape("added to tail:")
+  for i in range(0, len(l:lines) - 1)
+    let l:line = l:lines[i]
+        call setline(l:start[1] + i, l:line . l:add_text)
+  endfor
+endfunction
+
+vnoremap I :<C-u>call AddLineHead()<CR>
+vnoremap A :<C-u>call AddLineTail()<CR>
 vnoremap / :<C-U>call SearchSelectedInThisFile()<CR>
 """"""""""""""""""""" Plugin settings
 
