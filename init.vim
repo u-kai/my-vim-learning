@@ -53,8 +53,6 @@ command! Chat call Chat()
 command! Send call ProcessInput()
 command! Run call Run()
 
-
-
 if !exists('g:vscode')
     set expandtab
     set smartcase
@@ -215,6 +213,13 @@ function! SearchSelected()abort
     execute "Rg " . l:selected
 endfunction
 
+
+function! SearchSelectedInThisFile()abort 
+    let l:selected = GetVisualSelected()
+    let @/ = l:selected
+    execute "normal! / " . l:selected
+endfunction
+
 function TypeGenRust(name) abort
     let l:json = GetVisualSelected()
     let l:cmd = "tg rust -p --row " .  "'" .l:json . "'" . " --name " . a:name . " --derives " . "Clone,Debug" . "  --console"
@@ -230,6 +235,7 @@ function TypeGenGo(name) abort
     let output = system(l:cmd)
     let @0 = l:output
 endfunction
+
 command! -range -nargs=1 Tgrs call TypeGenRust(<f-args>)
 command! -range -nargs=1 Tggo call TypeGenGo(<f-args>)
 command! -range Typo call ConvertVisualSelectedByFunc("TypoCorrection")
@@ -240,6 +246,20 @@ vnoremap <C-v> :<C-u>call ConvertVisualSelectedByFunc("CreateVariableName")<CR>
 vnoremap <C-g> :<C-u>call SearchSelected()<CR>
 vnoremap <C-p> :<C-u>call ConvertVisualSelectedByFunc("CreateProgram")<CR>
 
+
+function! AddTopLine(text)abort
+    let l:text = a:text
+    while 1
+        let l:car = nr2char(getchar())
+        if l:car == "\<Esc>"
+            break
+        endif
+        let l:text = l:car . l:text
+    endwhile
+    return l:text
+endfunction
+vnoremap I :<C-u>call ConvertVisualSelectedByFunc("AddTopLine")<CR>
+vnoremap / :<C-U>call SearchSelectedInThisFile()<CR>
 """"""""""""""""""""" Plugin settings
 
 syntax on
@@ -420,7 +440,7 @@ command! -bang -nargs=* Rg
 \ <bang>0)
 nnoremap <C-g> :Rg<CR>
 
-let g:copilot_filetypes={"markdown":v:true,"yaml":v:true}
+let g:copilot_filetypes={"markdown":v:true,"yaml":v:true,"html":v:true}
 
 ""let g:ale_linters = {
 ""            \    'ruby': ['rubocop'],
