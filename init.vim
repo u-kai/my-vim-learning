@@ -258,6 +258,7 @@ call plug#begin('~/.config/nvim/plugged')
    ""         \ 'do': 'yarn install --frozen-lockfile --production',
    ""         \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html']}
 
+  Plug 'sebdah/vim-delve'
   """"""""""""""""""""" Displays
   """"""""""""""""""""" Display status line
   Plug 'vim-airline/vim-airline'
