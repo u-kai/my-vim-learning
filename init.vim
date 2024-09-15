@@ -319,8 +319,8 @@ function! AddLineTail()
   endfor
 endfunction
 
-vnoremap I :<C-u>call AddLineHead()<CR>
-vnoremap A :<C-u>call AddLineTail()<CR>
+vnoremap i :<C-u>call AddLineHead()<CR>
+vnoremap a :<C-u>call AddLineTail()<CR>
 vnoremap / :<C-U>call SearchSelectedInThisFile()<CR>
 """"""""""""""""""""" Plugin settings
 
