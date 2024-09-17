@@ -319,8 +319,9 @@ function! AddLineTail()
   endfor
 endfunction
 
-vnoremap i :<C-u>call AddLineHead()<CR>
-vnoremap a :<C-u>call AddLineTail()<CR>
+" iやa だと()などの中全体を選択するコマンドで失敗するので
+""vnoremap y :<C-u>call AddLineHead()<CR>
+""vnoremap z :<C-u>call AddLineTail()<CR>
 vnoremap / :<C-U>call SearchSelectedInThisFile()<CR>
 """"""""""""""""""""" Plugin settings
 
