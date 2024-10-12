@@ -237,6 +237,38 @@ function TypeGenGo(name) abort
     let @0 = l:output
 endfunction
 
+function! GenerateGoTest()
+    " 現在のファイル名を取得
+    let l:current_file = expand('%:t:r')
+    let l:test_file = l:current_file . '_test.go'
+
+    " 新しいテストファイルを作成
+    execute 'edit ' . l:test_file
+
+    " パッケージ名を取得
+    let l:package_name = expand('%:p:h:t')
+
+    " テストテンプレートの挿入
+    call append(0, 'package ' . l:package_name . '_test')
+    call append(1, '')
+    call append(2, 'import "testing"')
+    call append(3, '')
+    call append(4, 'func Test' . substitute(l:current_file, '\(^.\)', '\U\1', '') . '(t *testing.T) {')
+    call append(5, '    tests := []struct {')
+    call append(6, '        name string')
+    call append(7, '    }{')
+    call append(8, '        {')
+    call append(9, '        },')
+    call append(10, '    }')
+    call append(11, '    for _, tt := range tests {')
+    call append(12, '        t.Run(tt.name, func(t *testing.T) {')
+    call append(13, '            // TODO: テストコードを書く')
+    call append(14, '        })')
+    call append(15, '    }')
+    call append(16, '}')
+endfunction
+
+command! GenGoTest call GenerateGoTest()
 command! -range -nargs=1 Tgrs call TypeGenRust(<f-args>)
 command! -range -nargs=1 Tggo call TypeGenGo(<f-args>)
 command! -range Typo call ConvertVisualSelectedByFunc("TypoCorrection")
