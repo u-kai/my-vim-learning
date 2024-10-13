@@ -248,12 +248,15 @@ function! GenerateGoTest()
     " パッケージ名を取得
     let l:package_name = expand('%:p:h:t')
 
+    let l:pascal_case_file = system("npc -p ".  l:current_file)
+    let l:pascal_case_file = substitute(l:pascal_case_file, '\n', '', '')
+
     " テストテンプレートの挿入
     call append(0, 'package ' . l:package_name . '_test')
     call append(1, '')
     call append(2, 'import "testing"')
     call append(3, '')
-    call append(4, 'func Test' . substitute(l:current_file, '\(^.\)', '\U\1', '') . '(t *testing.T) {')
+    call append(4, 'func Test' . l:pascal_case_file . '(t *testing.T) {')
     call append(5, '    tests := []struct {')
     call append(6, '        name string')
     call append(7, '    }{')
