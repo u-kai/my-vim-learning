@@ -205,7 +205,7 @@ function CreateVariableName(text)
     endif
 
 
-    let cmd =  "cai ask -r 今から渡す指示に沿ったプログラミングの変数名を考えてく提示してください。ただし、解説等は一切不要で結果のみください。変数の命名規則は" . l:name_rule . "に則って考えてください" . ' "' . a:text . '"'
+    let cmd =  "cai ask -r 今から渡す指示に沿ったプログラミングの変数名を考えて提示してください。ただし、解説等は一切不要で結果のみください。変数の命名規則は" . l:name_rule . "に則って考えてください" . ' "' . a:text . '"'
     return system(l:cmd)
 endfunction
 
@@ -271,10 +271,26 @@ function! GenerateGoTest()
     call append(16, '}')
 endfunction
 
+function! TranslatedAndFrom() abort
+    let text = GetVisualSelected()
+    if l:text == ""
+        return ""
+    endif
+    let l:text = substitute(l:text, "'", '"', 'g')
+    let cmd =  "cai t -t ja" . " '" . l:text . "'"
+    let output = system(l:cmd)
+    let lines = split(l:output, "\n")
+    let current_file = expand('%:t:r')
+    let file_name = "translated-" . l:current_file . ".txt"
+    execute "edit " . l:file_name
+    call writefile(lines, l:file_name)
+endfunction
+
 command! GenGoTest call GenerateGoTest()
 command! -range -nargs=1 Tgrs call TypeGenRust(<f-args>)
 command! -range -nargs=1 Tggo call TypeGenGo(<f-args>)
 command! -range Typo call ConvertVisualSelectedByFunc("TypoCorrection")
+command! -range Translate call TranslatedAndFrom()
 
 vnoremap <C-t> :<C-u>call ConvertVisualSelectedByFunc("Translate")<CR>
 vnoremap <C-k> :<C-u>call ConvertVisualSelectedByFunc("HiraToKata")<CR>
