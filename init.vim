@@ -241,12 +241,15 @@ function! GenerateGoTest()
     " 現在のファイル名を取得
     let l:current_file = expand('%:t:r')
     let l:test_file = l:current_file . '_test.go'
+    let l:test_file_dir = expand('%:p:h')
+    let l:test_file = l:test_file_dir . '/' . l:test_file
+    " パッケージ名を取得
+    let l:package_name = expand('%:p:h:t')
+    let l:package_name = system("npc -s ".  l:package_name)
+    let l:package_name = substitute(l:package_name, '\n', '', '')
 
     " 新しいテストファイルを作成
     execute 'edit ' . l:test_file
-
-    " パッケージ名を取得
-    let l:package_name = expand('%:p:h:t')
 
     let l:pascal_case_file = system("npc -p ".  l:current_file)
     let l:pascal_case_file = substitute(l:pascal_case_file, '\n', '', '')
@@ -418,10 +421,18 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'hashivim/vim-terraform' , { 'for': 'terraform'}
 
   Plug 'ngmy/vim-rubocop'
-
-
+  Plug 'zbirenbaum/copilot.lua'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 
 call plug#end()
+
+lua << EOF
+require("CopilotChat").setup {
+  debug = true, -- Enable debugging
+  -- See Configuration section for rest
+}
+EOF
 
 let g:blamer_enabled = 1
 
