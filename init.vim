@@ -274,6 +274,9 @@ function! GenerateGoTest()
     call append(16, '}')
 endfunction
 
+
+
+
 function! TranslatedAndFrom() abort
     let text = GetVisualSelected()
     if l:text == ""
@@ -284,9 +287,17 @@ function! TranslatedAndFrom() abort
     let output = system(l:cmd)
     let lines = split(l:output, "\n")
     let current_file = expand('%:t:r')
-    let file_name = "translated-" . l:current_file . ".txt"
-    execute "edit " . l:file_name
-    call writefile(lines, l:file_name)
+    let file_name =  l:current_file . "-translated.txt"
+    let current_file_dir = expand('%:p:h')
+    execute "edit " . l:current_file_dir . "/" . l:file_name
+    for i in range(0, len(l:lines) - 1)
+        if i % 2 != 0
+            call append(line("$"), l:lines[i])
+            call append(line("$"), "")
+        else
+            call append(line("$"), l:lines[i])
+        endif   
+    endfor
 endfunction
 
 command! GenGoTest call GenerateGoTest()
