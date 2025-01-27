@@ -63,20 +63,63 @@ if !exists('g:vscode')
     set guioptions+=1
     syntax on
     set smartindent
-    inoremap { {}<LEFT>
-    inoremap [ []<LEFT>
-    inoremap ( ()<LEFT>
-    inoremap " ""<LEFT>
-    inoremap < <><LEFT>
-    " inoremap ' ''<LEFT>
-    " set complement insert enter
-    " inoremap <expr> <CR> pumvisible() ? "<C-y>" : "<CR>"
+    "inoremap { {}<LEFT>
+    "inoremap [ []<LEFT>
+    "inoremap ( ()<LEFT>
+    """inoremap "<LEFT>
+    "inoremap < <><LEFT>
+    "" inoremap ' ''<LEFT>
+    "" set complement insert enter
+    "" inoremap <expr> <CR> pumvisible() ? "<C-y>" : "<CR>"
     if has('vim_starting')
         let &t_SI .= "\e[6 q"
         let &t_EI .= "\e[2 q"
         let &t_SR .= "\e[4 q"
     endif
 endif
+
+inoremap <expr> " SmartRound('"')
+inoremap <expr> ' SmartRound("'")
+inoremap <expr> ` SmartRound("`")
+
+function! SmartRound(round)
+    let l:prev_char = getline('.')[col('.') - 2]
+    let l:next_char = getline('.')[col('.') - 1]
+
+    " すでに前後に文字があるなら '"' ではなく '"' 単体
+    if l:prev_char == '(' || l:prev_char == '{'
+        return a:round . a:round . "\<Left>"
+    elseif l:prev_char =~ '\S' || l:next_char =~ '\S'
+        return a:round
+    " すでに `"` で囲まれている場合は '"' だけを入力
+    elseif l:next_char == a:round
+        return a:round . "\<Right>"
+    else
+        return a:round . a:round . "\<Left>"
+    endif
+endfunction
+
+inoremap <expr> ( SmartPair('(', ')')
+inoremap <expr> { SmartPair('{', '}')
+inoremap <expr> [ SmartPair('[', ']')
+inoremap <expr> < SmartPair('<', '>')
+
+function! SmartPair(open, close)
+    let l:prev_char = getline('.')[col('.') - 2]
+    let l:next_char = getline('.')[col('.') - 1]
+
+    " 既に閉じカッコがある場合はカーソル移動
+    if l:next_char == a:close
+        return "\<Right>"
+
+    elseif l:next_char =~ '\S'
+        return a:open
+
+    " それ以外の場合は `()` のように両方入れてカーソルを中に
+    else
+        return a:open . a:close . "\<Left>"
+    endif
+endfunction
 
 function! HiraToKata(str) abort
   return a:str->substitute('[ぁ-ゖ]','\=nr2char(char2nr(submatch(0), v:true) + 96, v:true)', 'g')
