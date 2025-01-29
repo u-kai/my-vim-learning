@@ -108,8 +108,11 @@ function! SmartPair(open, close)
     let l:prev_char = getline('.')[col('.') - 2]
     let l:next_char = getline('.')[col('.') - 1]
 
+    " 二重で囲みを表現したい場合は `()` のように入力
+    if l:prev_char == a:open && l:next_char == a:close
+        return a:open . a:close . "\<Left>"
     " 既に閉じカッコがある場合はカーソル移動
-    if l:next_char == a:close
+    elseif l:next_char == a:close
         return "\<Right>"
 
     elseif l:next_char =~ '\S'
