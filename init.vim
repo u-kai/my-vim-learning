@@ -5,6 +5,7 @@ set incsearch
 set smartcase
 nnoremap <silent> <C-f> :<C-u>nohlsearch<CR><C-f>
 set clipboard=unnamed
+set autoread
 set noswapfile
 nnoremap <silent> <C-l> :bnext<CR>
 nnoremap <silent> <C-h> :bprev<CR>
