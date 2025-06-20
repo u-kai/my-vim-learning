@@ -5,7 +5,21 @@ set incsearch
 set smartcase
 nnoremap <silent> <C-f> :<C-u>nohlsearch<CR><C-f>
 set clipboard=unnamed
+" 外部変更の自動読み込み設定
 set autoread
+set updatetime=100
+
+" フォーカス変更時とバッファ切り替え時にチェック
+autocmd FocusGained,BufEnter * checktime
+
+"カーソル停止時にもチェック（フォーカスが当たったまま）
+autocmd CursorHold,CursorHoldI * checktime
+
+" タイマーによる定期チェック
+function! CheckFileChanges(timer)
+  checktime
+endfunction
+autocmd VimEnter * call timer_start(200, function('CheckFileChanges'), {'repeat': -1})
 set noswapfile
 nnoremap <silent> <C-l> :bnext<CR>
 nnoremap <silent> <C-h> :bprev<CR>
