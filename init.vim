@@ -97,6 +97,13 @@ inoremap <expr> " SmartRound('"')
 inoremap <expr> ' SmartRound("'")
 inoremap <expr> ` SmartRound("`")
 
+command! GitDiff vnew
+      \ | setlocal buftype=nofile bufhidden=delete noswapfile
+      \ | setfiletype gitcommit
+      \ | execute 'read !git diff #'
+      \ | setlocal readonly nobuflisted
+      \ | normal! gg
+
 function! SmartRound(round)
     let l:prev_char = getline('.')[col('.') - 2]
     let l:next_char = getline('.')[col('.') - 1]
