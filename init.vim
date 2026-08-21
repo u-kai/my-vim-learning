@@ -666,9 +666,10 @@ nnoremap <C-g> :Rg<CR>
 
 let g:copilot_filetypes={"markdown":v:true,"yaml":v:true,"html":v:true}
 
-""let g:ale_linters = {
-""            \    'ruby': ['rubocop'],
-""            \}
+let g:ale_linters = {
+            \    'ruby': ['rubocop'],
+            \    'go': [],
+            \}
 ""let g:ale_fixers = {
 ""            \'ruby': ['rubocop'],
 ""            \}
