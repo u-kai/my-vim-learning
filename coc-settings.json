@@ -1,15 +1,9 @@
 {
   "snippets.ultisnips.pythonPrompt": false,
   "coc.preferences.formatOnSave": true,
+  "go.goplsPath": "/Users/kai/go/bin/gopls",
+  "go.checkForUpdates": "disabled",
   "languageserver": {
-    "go": {
-      "command": "gopls",
-      "rootPatterns": ["go.work", "go.mod", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["go"],
-      "initializationOptions": {
-        "usePlaceholders": true
-      }
-    },
     "rubocop": {
       "command": "rubocop",
       "args": ["--lsp"],

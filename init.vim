@@ -97,7 +97,7 @@ inoremap <expr> " SmartRound('"')
 inoremap <expr> ' SmartRound("'")
 inoremap <expr> ` SmartRound("`")
 
-command! GitDiff vnew
+command! GitDiff enew
       \ | setlocal buftype=nofile bufhidden=delete noswapfile
       \ | setfiletype gitcommit
       \ | execute 'read !git diff #'
@@ -564,10 +564,9 @@ let g:coc_global_extensions = [
       \'coc-snippets', 
       \'coc-spell-checker', 
       \'coc-tslint-plugin', 
-      \'coc-ultisnips', 
-      \'coc-java', 
-      \'coc-go', 
-      \'coc-tsserver', 
+      \'coc-ultisnips',
+      \'coc-go',
+      \'coc-tsserver',
       \'coc-json', 
       \'coc-yaml',
       \'coc-solargraph',
