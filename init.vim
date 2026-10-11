@@ -75,7 +75,6 @@ if !exists('g:vscode')
     set number
     set tabstop=4
     set shiftwidth=4
-    set guioptions+=1
     syntax on
     set smartindent
     "inoremap { {}<LEFT>
@@ -500,39 +499,8 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'hashivim/vim-terraform' , { 'for': 'terraform'}
 
   Plug 'ngmy/vim-rubocop'
-  Plug 'zbirenbaum/copilot.lua'
-  Plug 'nvim-lua/plenary.nvim'
-  Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
-  " Deps
-  Plug 'stevearc/dressing.nvim'
-  Plug 'nvim-lua/plenary.nvim'
-  Plug 'MunifTanjim/nui.nvim'
-  Plug 'MeanderingProgrammer/render-markdown.nvim'
-  
-  " Optional deps
-  Plug 'hrsh7th/nvim-cmp'
-  Plug 'nvim-tree/nvim-web-devicons' "or Plug 'echasnovski/mini.icons'
-  Plug 'HakonHarnes/img-clip.nvim'
-  Plug 'zbirenbaum/copilot.lua'
-  
-  " Yay, pass source=true if you want to build from source
-  Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
 
 call plug#end()
-
-autocmd! User avante.nvim 
-lua << EOF
-require('avante_lib').load()
-require('avante').setup()
-EOF
-
-
-lua << EOF
-require("CopilotChat").setup {
-  debug = true, -- Enable debugging
-  -- See Configuration section for rest
-}
-EOF
 
 let g:blamer_enabled = 1
 
