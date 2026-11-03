@@ -500,7 +500,17 @@ call plug#begin('~/.config/nvim/plugged')
 
   Plug 'ngmy/vim-rubocop'
 
+  " Copilot chat (inline completions come from copilot.vim in pack/)
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'CopilotC-Nvim/CopilotChat.nvim'
+
 call plug#end()
+
+lua << EOF
+require("CopilotChat").setup {
+  model = 'gpt-6-astra', -- see ':CopilotChatModels' for available models
+}
+EOF
 
 let g:blamer_enabled = 1
 
