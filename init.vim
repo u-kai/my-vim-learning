@@ -504,12 +504,22 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'nvim-lua/plenary.nvim'
   Plug 'CopilotC-Nvim/CopilotChat.nvim'
 
+  " Inline images and mermaid diagrams (needs magick and mmdc)
+  Plug 'folke/snacks.nvim'
+
 call plug#end()
 
 lua << EOF
 require("CopilotChat").setup {
   model = 'gpt-6-astra', -- see ':CopilotChatModels' for available models
 }
+
+-- Inside tmux, snacks can't see the outer terminal and disables images.
+-- iTerm2 >= 3.7.3 implements kitty graphics with unicode placeholders.
+if vim.env.TMUX and vim.env.LC_TERMINAL == "iTerm2" then
+  vim.env.SNACKS_KITTY = "true"
+end
+require("snacks").setup { image = { enabled = true } }
 EOF
 
 let g:blamer_enabled = 1
