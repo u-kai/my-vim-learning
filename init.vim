@@ -507,6 +507,9 @@ call plug#begin('~/.config/nvim/plugged')
   " Inline images and mermaid diagrams (needs magick and mmdc)
   Plug 'folke/snacks.nvim'
 
+  " Render markdown pipe tables, wrapping cells to fit the window
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
+
 call plug#end()
 
 lua << EOF
@@ -519,7 +522,34 @@ require("CopilotChat").setup {
 if vim.env.TMUX and vim.env.LC_TERMINAL == "iTerm2" then
   vim.env.SNACKS_KITTY = "true"
 end
-require("snacks").setup { image = { enabled = true } }
+-- init.vim can be sourced again (:ReloadInitNvim), and snacks errors on a second setup.
+local snacks = require("snacks")
+if not snacks.did_setup then
+  snacks.setup { image = { enabled = true } }
+end
+
+-- Tables only: every other render-markdown feature stays off.
+local has_render_markdown, render_markdown = pcall(require, "render-markdown")
+if has_render_markdown then
+  render_markdown.setup {
+    pipe_table = { enabled = true, wrap = true },
+    heading = { enabled = false },
+    paragraph = { enabled = false },
+    code = { enabled = false },
+    dash = { enabled = false },
+    document = { enabled = false },
+    bullet = { enabled = false },
+    checkbox = { enabled = false },
+    quote = { enabled = false },
+    link = { enabled = false },
+    sign = { enabled = false },
+    inline_highlight = { enabled = false },
+    indent = { enabled = false },
+    html = { enabled = false },
+    latex = { enabled = false },
+    yaml = { enabled = false },
+  }
+end
 EOF
 
 let g:blamer_enabled = 1

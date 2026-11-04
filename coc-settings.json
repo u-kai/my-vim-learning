@@ -1,6 +1,9 @@
 {
   "snippets.ultisnips.pythonPrompt": false,
   "coc.preferences.formatOnSave": true,
+  "markdownlint.config": {
+    "MD013": { "tables": false }
+  },
   "go.goplsPath": "/Users/kai/go/bin/gopls",
   "go.checkForUpdates": "disabled",
   "languageserver": {
