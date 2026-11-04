@@ -1,3 +1,6 @@
+" Python isn't used; skip detection, which crashes on leftover Intel-only python3.x in /usr/local/bin.
+let g:loaded_python3_provider = 0
+
 """"""""""""""""""""" Normal settings
 inoremap <silent> jj <ESC>
 set hlsearch
