@@ -528,7 +528,21 @@ end
 -- init.vim can be sourced again (:ReloadInitNvim), and snacks errors on a second setup.
 local snacks = require("snacks")
 if not snacks.did_setup then
-  snacks.setup { image = { enabled = true } }
+  snacks.setup {
+    image = {
+      enabled = true,
+      -- Defaults cap images at 80x40 cells; the window size still bounds them.
+      doc = { max_width = 1000, max_height = 1000 },
+    },
+  }
+  -- Files given on the command line are already loaded by `syntax on` / plug#end(),
+  -- so snacks' BufReadPre/FileType hooks miss them; attach to those buffers now.
+  require("snacks.image").setup()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].filetype ~= "" then
+      vim.api.nvim_exec_autocmds("FileType", { group = "snacks.image", buffer = buf })
+    end
+  end
 end
 
 -- Tables only: every other render-markdown feature stays off.
